@@ -12,9 +12,18 @@ const userSchema = new mongoose.Schema({
         maxLength: 10,
         unique: true
     },
-    picked: [ storeSchema ],
-    registered: [ storeSchema ],
-    comments: [ commentSchema ]
+    picked: [ {
+        type: Number,
+        ref: "Store"
+    } ],
+    registered: [ {
+        type: Number,
+        ref: "Store"
+    } ],
+    comments: [ {
+        type: Number,
+        ref: "Comment"
+    } ]
 })
 
 const User = mongoose.model("User", userSchema)

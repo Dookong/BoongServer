@@ -9,6 +9,9 @@ const { commentSchema } = require("../schemas/store")
 const Store = mongoose.model("Store", storeSchema)
 const Comment = mongoose.model("Comment", commentSchema)
 
+//거리 계산 메서드
+const { getDistanceBetweenCoord } = require("../utils/distance")
+
 //라우팅 설정
 router.use(function(req, res, next){
     next()
@@ -25,6 +28,34 @@ router.get("/", (req, res) => {
         })
         .catch(err => {
             console.error(err)
+        })
+})
+
+/**
+* @path {GET} http://localhost:3000/api/stores/:distance
+* @description 가게 거리별 조회
+*/
+router.get("/:distance", (req, res) => {
+    const distance = req.params.distance
+    
+    const coord = req.body.coord
+    const currentX = coord.x
+    const currentY = coord.y
+
+    Store.find()
+        .then(stores => {
+            res.json(stores.filter(
+                it => {
+                    let d = getDistanceBetweenCoord(
+                        it.x, it.y, currentX, currentY
+                    ) 
+                    console.log(`${d} < ${distance}`)
+                    return d <= distance
+                }
+            ))
+        })
+        .catch(err => {
+            console.error(`err: ${err}`)
         })
 })
 
