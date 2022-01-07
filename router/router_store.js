@@ -3,8 +3,11 @@ const mongoose = require("mongoose")
 const router = express.Router()
 
 //데이터 스키마
-const { storeSchema } = require("../models/store")
+const { storeSchema } = require("../schemas/store")
+const { commentSchema } = require("../schemas/store")
+
 const Store = mongoose.model("Store", storeSchema)
+const Comment = mongoose.model("Comment", commentSchema)
 
 //라우팅 설정
 router.use(function(req, res, next){
@@ -40,8 +43,8 @@ router.post("/register", (req, res) => {
     store.x = req.body.x
     store.y = req.body.y
     store.desc = req.body.desc
-    store.menus = []
-    store.comments = []
+    store.menus = req.body.menus
+    store.comments = req.body.comments
 
     store.save((err, storeInfo) => {
         if (err) return res.json({ok: false, err})
@@ -52,4 +55,45 @@ router.post("/register", (req, res) => {
     })
 })
 
+/**
+* @path {POST} http://localhost:3000/api/stores/addComment
+* @description 댓글 등록
+*  req.body에 데이터를 담아서 전송
+*/
+router.post("/addComment", (req, res) => {
+    const comment = new Comment({
+        writer: req.body.userId,
+        contents: req.body.contents
+    })
+
+    comment.save()
+        .then(result => {
+            res.json({
+                ok: true,
+                result
+            })
+        })
+        .catch(err => {
+            console.error(err)
+        })
+})
+
+
+/**
+* @path {Delete} http://localhost:3000/api/stores/delComment
+* @description 댓글 삭제
+*/
+router.delete("/delComment", (req, res) => {
+    const comment_id = req.query.comment_id
+    Comment.deleteOne({commentId: comment_id})
+        .then(result => {
+            res.json({
+                ok: true,
+                result
+            })
+        })
+        .catch(err => {
+            console.error(err)
+        })
+})
 module.exports = router

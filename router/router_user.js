@@ -2,7 +2,7 @@ const express = require("express")
 const router = express.Router()
 
 //데이터 스키마
-const { User } = require("../models/user")
+const { User } = require("../schemas/user")
 
 router.use(function(req, res, next){
     next()
@@ -94,9 +94,9 @@ router.put("/update", (req, res) => {
 * @description 회원 탈퇴 by userId
 * 
 */
-router.delete("/api/user/delete", (req, res) => {
+router.delete("/delete", (req, res) => {
     const user_id = req.query.user_id
-    User.remove({userId: user_id})
+    User.deleteOne({userId: user_id})
         .then(result => {
             res.json({
                 ok: true,
