@@ -59,6 +59,21 @@ router.get("/:distance", (req, res) => {
         })
 })
 
+/**
+* @path {GET} api/stores/user/:user_id
+* @description 등록한 유저별 조회
+*/
+router.get("/user/:user_id", (req, res) => {
+    Store.find()
+        .then(stores => {
+            res.json(stores.filter(
+                it => it.registrant == req.params.user_id
+            ))
+            .catch(err => {
+                console.error(err)
+            })
+        })
+})
 
 /**
 * @path {POST} api/stores/register

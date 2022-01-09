@@ -12,7 +12,7 @@ router.use(function(req, res, next){
 
 /**
 * @path {GET} api/comments/:comment_id
-* @description 회원 조회 by comment_id
+* @description 댓글 조회 by comment_id
 */
 router.get("/:comment_id", (req, res) => {
     Comment.findOne({_id: req.params._id}, function(err, com){
@@ -23,7 +23,7 @@ router.get("/:comment_id", (req, res) => {
 
 /**
 * @path {GET} api/comments/user/:user_id
-* @description 회원 조회 by user_id
+* @description 댓글 조회 by user_id
 */
 router.get("/user/:user_id", (req, res) => {
     Comment.find()
