@@ -33,6 +33,16 @@ router.get("/user", (req, res) => {
     })
 })
 
+/**
+* @path {GET} api/users/userName?user_name=김만득
+* @description 회원 조회 by userName
+*/
+router.get("/userName", (req, res) => {
+    User.findOne({nickName: req.query.user_name}, function(err, user){
+        if (err) return res.json({ok: false, err})
+        return res.json({ok: true, user})
+    })
+})
 
 /**
 * @path {GET} api/users/:user_id
@@ -108,4 +118,17 @@ router.delete("/delete", (req, res) => {
         })
 })
 
+/**
+* @path {GET} api/users/pick?user_id=12345678?store_id=61d7f94cb88dedbd93140fab
+* @description 가게 찜하기
+*/
+router.post("/pick", (req, res) => {
+    User.findOne({userId: req.query.user_id}, function(err, user){
+        if (err) return res.json({ok: false, err})
+        user.picked.push(req.query.store_id)
+        user.picked = [...new Set(user.picked)]
+        user.save()
+        return res.json({ok: true, user})
+    })
+})
 module.exports = router

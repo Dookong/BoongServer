@@ -11,15 +11,16 @@ const userSchema = new mongoose.Schema({
         unique: true
     },
     picked: [ {
-        type: Number,
-        ref: "Store"
+        type: String,
+        ref: "Store",
+        unique: true
     } ],
     registered: [ {
-        type: Number,
+        type: String,
         ref: "Store"
     } ],
     comments: [ {
-        type: Number,
+        type: String,
         ref: "Comment"
     } ]
 })

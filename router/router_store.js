@@ -67,13 +67,13 @@ router.get("/user/:user_id", (req, res) => {
     Store.find()
         .then(stores => {
             res.json(stores.filter(
-                it => it.registrant == req.params.user_id
+                it => it.registrant.id == req.params.user_id
             ))
-            .catch(err => {
-                console.error(err)
-            })
         })
-})
+        .catch(err => {
+            console.error(err)
+        })
+    })
 
 /**
 * @path {POST} api/stores/register

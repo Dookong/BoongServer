@@ -23,7 +23,10 @@ const storeSchema = new mongoose.Schema({
         default: Date.now
     },
     storeName: String,
-    registrant: String,
+    registrant: {
+        id: Number,
+        nickName: String
+    },
     desc: String,
     address: String,
     x: Number,
