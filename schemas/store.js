@@ -1,5 +1,6 @@
 const mongoose = require("mongoose")
-const autoIncrement = require("mongoose-sequence")(mongoose)
+const commentSchema = require("./comment")
+
 
 const menuSchema = new mongoose.Schema({
     itemName: {
@@ -13,22 +14,6 @@ const menuSchema = new mongoose.Schema({
     price: {
         type: Number,
         required: true
-    }
-})
-
-const commentSchema = new mongoose.Schema({
-    writer: {
-        type: Number,
-        required: true,
-        ref: "User"
-    },
-    contents: {
-        type: String,
-        required: true
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now
     }
 })
 
@@ -47,9 +32,8 @@ const storeSchema = new mongoose.Schema({
     comments: [ commentSchema ]
 })
 
-storeSchema.plugin(autoIncrement, {inc_field: 'storeId'})
-commentSchema.plugin(autoIncrement, {inc_field: 'commentId'})
+//storeSchema.plugin(autoIncrement, {inc_field: 'storeId'})
+//commentSchema.plugin(autoIncrement, {inc_field: 'commentId'})
 
 mongoose.model("Store", storeSchema)
-mongoose.model("Comment", commentSchema)
-module.exports = { storeScheme: storeSchema, commentSchema: commentSchema }
+module.exports = { storeScheme: storeSchema }

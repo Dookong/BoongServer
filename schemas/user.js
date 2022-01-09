@@ -1,6 +1,4 @@
 const mongoose = require("mongoose")
-const storeSchema = require("./store")
-const commentSchema = require("./store")
 
 const userSchema = new mongoose.Schema({
     userId: {

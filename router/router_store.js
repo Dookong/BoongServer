@@ -4,7 +4,7 @@ const router = express.Router()
 
 //데이터 스키마
 const { storeSchema } = require("../schemas/store")
-const { commentSchema } = require("../schemas/store")
+const { commentSchema } = require("../schemas/comment")
 
 const Store = mongoose.model("Store", storeSchema)
 const Comment = mongoose.model("Comment", commentSchema)
@@ -18,7 +18,7 @@ router.use(function(req, res, next){
 })
 
 /**
-* @path {GET} http://localhost:3000/api/stores
+* @path {GET} api/stores
 * @description 가게 전체 조회
 */
 router.get("/", (req, res) => {
@@ -32,7 +32,7 @@ router.get("/", (req, res) => {
 })
 
 /**
-* @path {GET} http://localhost:3000/api/stores/:distance
+* @path {GET} api/stores/:distance
 * @description 가게 거리별 조회
 */
 router.get("/:distance", (req, res) => {
@@ -61,7 +61,7 @@ router.get("/:distance", (req, res) => {
 
 
 /**
-* @path {POST} http://localhost:3000/api/stores/register
+* @path {POST} api/stores/register
 * @description 가게 등록
 *  req.body에 데이터를 담아서 전송
 */
@@ -87,7 +87,7 @@ router.post("/register", (req, res) => {
 })
 
 /**
-* @path {POST} http://localhost:3000/api/stores/addComment
+* @path {POST} api/stores/addComment
 * @description 댓글 등록
 *  req.body에 데이터를 담아서 전송
 */
@@ -103,25 +103,44 @@ router.post("/addComment", (req, res) => {
                 ok: true,
                 result
             })
+            Store.findOne({_id: req.query.store_id})
+                .then(store => {
+                    store.comments.push(comment)
+                    store.save()
+                })
+                .catch(err => {
+                    console.error(err)
+                })
         })
         .catch(err => {
             console.error(err)
         })
-})
+    }
+)
 
 
 /**
-* @path {Delete} http://localhost:3000/api/stores/delComment
+* @path {Delete} api/stores/delComment
 * @description 댓글 삭제
 */
 router.delete("/delComment", (req, res) => {
     const comment_id = req.query.comment_id
-    Comment.deleteOne({commentId: comment_id})
+    Comment.deleteOne({_id: comment_id})
         .then(result => {
             res.json({
                 ok: true,
                 result
             })
+            Store.findOne({_id: req.query.store_id})
+                .then(store => {
+                    store.comments =  store.comments.filter(
+                        it => it._id != comment_id
+                    )
+                    store.save()
+                })
+                .catch(err => {
+                    console.error(err)
+                })
         })
         .catch(err => {
             console.error(err)

@@ -9,7 +9,7 @@ router.use(function(req, res, next){
 })
 
 /**
-* @path {GET} http://localhost:3000/api/users
+* @path {GET} api/users
 * @description 회원 전체 조회
 */
 router.get("/", (req, res) => {
@@ -23,7 +23,7 @@ router.get("/", (req, res) => {
 })
 
 /**
-* @path {GET} http://localhost:3000/api/users/user?user_id=12345678
+* @path {GET} api/users/user?user_id=12345678
 * @description 회원 조회 by userId
 */
 router.get("/user", (req, res) => {
@@ -35,7 +35,7 @@ router.get("/user", (req, res) => {
 
 
 /**
-* @path {GET} http://localhost:3000/api/users/:user_id
+* @path {GET} api/users/:user_id
 * @description Path Variables 요청 데이터 값이 있고 반환 값이 있는 GET Method 
 * Path Variables 방식: 다른 라우터 보다 아래 있어야 한다.
 */
@@ -49,7 +49,7 @@ router.get("/:user_id", (req, res) => {
 
 
 /**
-* @path {POST} http://localhost:3000/api/users/register
+* @path {POST} api/users/register
 * @description 회원 등록
 *  req.body에 데이터를 담아서 전송
 */
@@ -66,7 +66,7 @@ router.post("/register", (req, res) => {
 })
 
 /**
-* @path {PUT} http://localhost:3000/api/users/update
+* @path {PUT} api/users/update
 * @description 전체 데이터를 수정할 때 사용되는 Method
 */
 router.put("/update", (req, res) => {
@@ -90,7 +90,7 @@ router.put("/update", (req, res) => {
 
 
 /**
-* @path {DELETE} http://localhost:3000/api/user/delete
+* @path {DELETE} api/user/delete
 * @description 회원 탈퇴 by userId
 * 
 */

@@ -12,6 +12,8 @@ app.use(urlencoded({extended: true}))
 //라우터
 app.use("/api/users", require("./router/router_user"))
 app.use("/api/stores", require("./router/router_store"))
+app.use("/api/articles", require("./router/router_article"))
+app.use("/api/comments", require("./router/router_comment"))
 
 //서버 실행
 app.listen(process.env.PORT, () => console.log("붕어빵:)"));
