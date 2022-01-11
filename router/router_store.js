@@ -35,21 +35,21 @@ router.get("/", (req, res) => {
 * @path {GET} api/stores/:distance
 * @description 가게 거리별 조회
 */
-router.get("/:distance", (req, res) => {
+router.get("/:distance/:x/:y", (req, res) => {
     const distance = req.params.distance
-    
-    const coord = req.body.coord
-    const currentX = coord.x
-    const currentY = coord.y
+    const currentX = req.params.x
+    const currentY = req.params.y
 
     Store.find()
         .then(stores => {
+            let cnt = 1
             res.json(stores.filter(
                 it => {
                     let d = getDistanceBetweenCoord(
                         it.x, it.y, currentX, currentY
                     ) 
-                    console.log(`${d} < ${distance}`)
+                    console.log(`${cnt++}: ${d} < ${distance}`)
+                    console.log("------------------------")
                     return d <= distance
                 }
             ))
@@ -64,6 +64,7 @@ router.get("/:distance", (req, res) => {
 * @description 등록한 유저별 조회
 */
 router.get("/user/:user_id", (req, res) => {
+    console.log(req.params)
     Store.find()
         .then(stores => {
             res.json(stores.filter(
@@ -76,6 +77,47 @@ router.get("/user/:user_id", (req, res) => {
     })
 
 /**
+* @path {GET} api/stores/store/:store_id
+* @description 가게 아이디로 가게 조회
+*/
+router.get("/store/:store_id", (req, res) => {
+    console.log(req.params)
+    Store.findById(req.params.store_id)
+        .then(store => {
+            res.json({
+                ok: true,
+                store
+            })
+        })
+        .catch(err => {
+            console.error(err)
+        })
+    })
+
+/**
+* @path {GET} api/stores/store/coord/:x/:y
+* @description 가게 좌표로 가게 조회
+*/
+router.get("/store/coord/:x/:y", (req, res) => {
+    const x = req.params.x
+    const y = req.params.y
+
+    console.log(req.body)
+    Store.find()
+        .then(stores => {
+            const filtered = stores.filter(it => it.x == x && it.y == y)
+            const store = filtered[0]
+            res.json({
+                ok: true,
+               store
+            })
+        })
+        .catch(err => {
+            console.error(`err: ${err}`)
+        })
+    })
+
+/**
 * @path {POST} api/stores/register
 * @description 가게 등록
 *  req.body에 데이터를 담아서 전송
@@ -84,7 +126,8 @@ router.post("/register", (req, res) => {
     const store = new Store()
     
     store.storeName = req.body.storeName
-    store.registrant = req.body.registrant
+    store.registrant.id = req.body.registrant.id
+    store.registrant.nickName = req.body.registrant.nickName
     store.address = req.body.address
     store.x = req.body.x
     store.y = req.body.y
@@ -108,8 +151,9 @@ router.post("/register", (req, res) => {
 */
 router.post("/addComment", (req, res) => {
     const comment = new Comment({
-        writer: req.body.userId,
-        contents: req.body.contents
+        writer: req.query.user_id,
+        contents: req.query.contents,
+        where: req.query.store_id
     })
 
     comment.save()

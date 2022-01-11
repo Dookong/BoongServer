@@ -36,4 +36,20 @@ router.get("/user/:user_id", (req, res) => {
             console.error(err)
         })
 })
+
+/**
+* @path {GET} api/comments/store/:user_id
+* @description 댓글 조회 by store_id
+*/
+router.get("/store/:store_id", (req, res) => {
+    Comment.find()
+        .then(comments => {
+            res.json(comments.filter(
+                it => it.where == req.params.store_id
+            ))
+        })
+        .catch(err => {
+            console.error(err)
+        })
+})
 module.exports = router

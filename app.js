@@ -21,6 +21,8 @@ app.listen(process.env.PORT, () => console.log("붕어빵:)"));
 // 몽고DB 연결
 const mongoose = require("mongoose")
 mongoose
-    .connect(process.env.MONGO_URI)
+    .connect(process.env.MONGO_URI, {
+        autoIndex: true
+    })
     .then(() => console.log("MongoDB 연결 완료!"))
     .catch(err => console.log(err))

@@ -3,7 +3,8 @@ const mongoose = require("mongoose")
 const userSchema = new mongoose.Schema({
     userId: {
         type: Number,
-        unique: true
+        unique: true,
+        required: true
     },
     nickName: { 
         type: String,
@@ -12,8 +13,7 @@ const userSchema = new mongoose.Schema({
     },
     picked: [ {
         type: String,
-        ref: "Store",
-        unique: true
+        ref: "Store"
     } ],
     registered: [ {
         type: String,

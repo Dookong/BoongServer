@@ -13,6 +13,11 @@ const commentSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
+    },
+    where: {
+        type: String,
+        required: true,
+        ref: "Store"
     }
 })
 

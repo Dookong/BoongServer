@@ -27,8 +27,11 @@ router.get("/", (req, res) => {
 * @description 회원 조회 by userId
 */
 router.get("/user", (req, res) => {
+    console.log(req.query)
     User.findOne({userId: req.query.user_id}, function(err, user){
         if (err) return res.json({ok: false, err})
+        if (user == null) return res.json({ok: false, message: "user is null"})
+        console.log("유저 조회 성공: " + user)
         return res.json({ok: true, user})
     })
 })
@@ -45,16 +48,19 @@ router.get("/userName", (req, res) => {
 })
 
 /**
-* @path {GET} api/users/:user_id
-* @description Path Variables 요청 데이터 값이 있고 반환 값이 있는 GET Method 
-* Path Variables 방식: 다른 라우터 보다 아래 있어야 한다.
+* @path {GET} api/users/picked?user_id=12345678
+* @description 회원 조회 by userId
 */
-router.get("/:user_id", (req, res) => {
+router.get("/picked", (req, res) => {
+    console.log(req.query)
+    User.findOne({userId: req.query.user_id}, function(err, user){
+        if (err) return res.json({ok: false, err})
+        if (user == null) return res.json({ok: false, message: "user is null"})
+        const stores = user.picked
 
-    const user_id = req.params.user_id
-    const user = users.filter(data => data.id == user_id);
-
-    res.json({ok: true, user: user})
+        stores.map()
+        return res.json({ok: true, stores})
+    })
 })
 
 
@@ -66,6 +72,7 @@ router.get("/:user_id", (req, res) => {
 router.post("/register", (req, res) => {
     const user = new User(req.body)
 
+    console.log(req.body)
     user.save((err, userInfo) => {
         if (err) return res.json({ok: false, err})
         return res.status(200).json({
